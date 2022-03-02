@@ -1,0 +1,90 @@
+﻿@model _0306191074_TranThanhTam.Areas.Admin.Models.TaiKhoan
+@*
+
+*@
+@{
+}
+
+</div>
+<section class="product_section layout_padding">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col col-lg-8">
+                <article class="card-body">
+                    <h4 class="mb-4">Create account</h4>
+                    <form asp-action="Register" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row gx-3">
+                            <div class="col mb-4">
+                                <label asp-for="TenTaiKhoan" class="form-label"></label>
+                                <input asp-for="TenTaiKhoan" type="text" class="form-control" placeholder="" />
+                                <span asp-validation-for="TenTaiKhoan" class="text-danger"></span>
+                            </div>
+                            <div class="col mb-4">
+                                <label asp-for="HoTen" class="form-label"></label>
+                                <input asp-for="HoTen" class="form-control" placeholder="" />
+                                <span asp-validation-for="HoTen" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row gx-3">
+                            <div class="col-12 mb-3">
+                                <label asp-for="DiaChi" class="form-label"></label>
+                                <input asp-for="DiaChi" class="form-control" placeholder="" />
+                                <span asp-validation-for="DiaChi" class="text-danger"></span>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" class="form-control" placeholder="" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label asp-for="SoDienThoai" class="form-label"></label>
+                                <input asp-for="SoDienThoai" class="form-control" placeholder="" />
+                                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                            </div>
+                            <div class="col mb-3">
+                                <label asp-for="MatKhau" class="form-label"></label>
+                                <input asp-for="MatKhau" class="form-control" type="password" />
+                                <span asp-validation-for="MatKhau" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-check-input" asp-for="PhanQuyen" />
+                        <div class="form-group">
+                            <label asp-for="AnhDaiDien" class="form-label"></label>
+                            <input asp-for="AnhDaiDien" id="hinhAnh"  class="form-control text-light" hidden />
+                            <input asp-for="FileHinhAnh" id="img" class="file-upload-default">
+                            <span asp-validation-for="AnhDaiDien" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <img style="width: 200px; display: none" id="imgPreview" alt="" />
+                        </div>
+                         <input type="hidden" class="form-check-input" asp-for="TrangThai" value="true"/>
+                        <div class="row mt-3 mb-4 align-items-center">
+                            <div class="col-auto">
+                                <button class="btn btn-primary" type="submit">Register now</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr />
+                    <p class="mb-0">Already have an account? <a asp-action="Login">Sign in</a></p>
+                </article>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $("#img").on("change", function (e) {
+                var filePath = URL.createObjectURL(e.target.files[0]);
+                $("#imgPreview").show().attr("src", filePath);
+                var filename = $("#img").val().replace(/C:\\fakepath\\/i, '');
+                $("#hinhAnh").val(filename);
+            });
+        });
+    </script>
+}

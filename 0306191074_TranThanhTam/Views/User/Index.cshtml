@@ -1,0 +1,337 @@
+﻿@using _0306191074_TranThanhTam.Areas.Admin.Models;
+@model _0306191074_TranThanhTam.Areas.Admin.Models.TaiKhoan
+@using Microsoft.AspNetCore.Http;
+@*
+
+*@
+@{
+    ViewData["Title"] = "User Page";
+}
+@section CSS {
+    <style>
+        .form-select {
+            display: block;
+            width: 100%;
+            padding: .43rem 1.84rem .43rem .84rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #51585e;
+            vertical-align: middle;
+            background-color: #f9f9f9;
+            background-repeat: no-repeat;
+            background-position: right .84rem center;
+            background-size: 16px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: .35rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        select {
+            word-wrap: normal;
+        }
+
+        button, select {
+            text-transform: none;
+        }
+    </style>
+}
+
+<section class="layout_padding">
+    <div class="container pt-1 pb-1">
+        <div class="row">
+            <div class="col-lg-12">
+                <article class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="row gx-3">
+                                        <input type="hidden" id="IdUser" value="@Model.Id" />
+                                        <div class="col-lg-12 mb-3"> <label class="form-label">Họ tên</label> <input class="form-control" id="hoTen" type="text" value="@Html.DisplayFor(model => model.HoTen)" placeholder="Type here"> </div>
+                                        <!-- col .// -->
+                                        <div class="col-lg-6 col-md-6 mb-3"> <label class="form-label">Email</label> <input class="form-control" type="email" value="@Html.DisplayFor(model => model.Email)" readonly> </div>
+                                        <!-- col .// -->
+                                        <div class="col-lg-6 col-md-6 mb-3"> <label class="form-label">Số điện thoại</label> <input id="sdt" class="form-control" type="tel" value="@Html.DisplayFor(model => model.SoDienThoai)" placeholder="+1234567890"> </div>
+                                        <!-- col .// -->
+                                        <div class="col-lg-12 mb-3"> <label class="form-label">Địa chỉ</label> <input class="form-control" id="diaChi" type="text" value="@Html.DisplayFor(model => model.DiaChi)" placeholder="Type here"> </div>
+                                    </div>
+                                </div>
+                                <aside class="col-lg-4">
+                                    <div class="text-lg-center mt-3">
+                                        <img class="img-lg mb-3 img-avatar" width="100" height="100" src="~/images/taikhoan/@Html.DisplayFor(model => model.AnhDaiDien)" alt="User Photo">
+                                        <div>
+                                            <input type="hidden" id="hinhAnh"  value="" />
+                                            <input type="file" id="FileHinhAnh" name="AnhDaiDien" value="" class="btn btn-sm btn-light" />
+                                        </div>
+                                    </div>
+                                </aside>
+
+                            </div>
+                            <br>
+                            <input class="btn btn-primary" id="submit" type="text" style="cursor: pointer" value="Lưu thay đổi" readonly />
+                        </form>
+                        <hr class="my-4">
+                        <div class="row">
+                            <div class="col col-lg-12">
+                                <a id="logout" href="#" class="btn btn-sm btn-outline-danger">Đăng xuất</a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-12">
+                <hr />
+                <div class="d-flex justify-content-between">
+                    <h3>Lịch sử mua hàng</h3>
+                    <div class="d-flex">
+                        <select id="locHoaDon" class="form-select">
+                            <option value="*" selected="">Lọc hoá đơn</option>
+                            <option value="1">Đang chờ xác nhận thông tin</option>
+                            <option value="2">Đang chờ vận chuyển</option>
+                            <option value="3">Đang chờ nhận hàng</option>
+                            <option value="4">Đã giao hàng</option>
+                            <option value="5">Đã huỷ</option>
+                        </select>
+                        <button id="loc" class="btn btn-primary" style="margin-left: 5px">Lọc</button>
+                    </div>
+                </div>
+                <table class="table table-light">
+                    <thead>
+                        <tr>
+                            <th scope="col">Mã hoá đơn</th>
+                            <th scope="col">Họ tên</th>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Địa chỉ</th>
+                            <th scope="col">Ngày mua hàng</th>
+                            <th scope="col">Tổng tiền</th>
+                            <th scope="col">Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lstHoaDon">
+                        @if (ViewData["lichsu"] != null)
+                        {
+                            @foreach (var item in ViewData["lichsu"] as IList<HoaDon>)
+                            {
+                                <tr>
+                                    <th scope="row">@item.Id</th>
+                                    <td>@item.Account.HoTen</td>
+                                    <td>
+                                        <ul>
+                                            @foreach (var cthd in item.ChiTietHoaDons)
+                                            {
+                                                <li class='text-wrap'>@cthd.SanPham.TenSanPham. <strong> x @cthd.SoLuong</strong></li>
+                                            }
+                                        </ul>
+                                    </td>
+                                    <td>@item.DiaChiGH</td>
+                                    <td>@String.Format("{0:MM/dd/yyyy}", item.NgayXuatHD)</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TongTien)
+                                    </td>
+                                    <td>
+
+                                        @if (item.TrangThai == 1)
+                                        {
+                                            <input type="hidden" value="@item.Id" id="idHoaDon" />
+                                            <a class="btn btn-primary text-light " href="#" id="xacNhan">Xác nhận đơn hàng</a>
+                                            <a class="btn btn-danger text-light" href="#" id="Huy">Huỷ đơn hàng</a>
+                                        }
+                                        else if (item.TrangThai == 2)
+                                        {
+                                            <span class="text-primary">Đơn hàng đang chờ vận chuyển</span>
+                                        }
+                                        else if (item.TrangThai == 3)
+                                        {
+                                            <input type="hidden" value="@item.Id" id="idHoaDon2" />
+                                            <span>Bạn đã nhận được hàng hay chưa ? nếu có vui lòng bấm vào nút xác nhận dưới đây</span>
+                                            <a class="btn btn-success text-light " href="#" id="xacNhan2">Xác nhận</a>
+                                        }
+                                        else if (item.TrangThai == 5)
+                                        {
+                                            <span class="text-danger">Đơn hàng đã bị huỷ</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">Nhận hàng thành công</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section JS {
+    <script>
+
+        $(window).ready(function () {
+            const lstXacNhanbtn = document.querySelectorAll("#xacNhan");
+            const lstXacNhanbtn2 = document.querySelectorAll("#xacNhan2");
+            const lstHuybtn = document.querySelectorAll("#Huy");
+
+            const lstIdHoaDon = document.querySelectorAll("#idHoaDon");
+            const lstIdHoaDon2 = document.querySelectorAll("#idHoaDon2");
+
+            $("#logout").on('click', function () {
+            $.ajax({
+                method: "post",
+                url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/user/logout")",
+            }).done(function ($msg) {
+                location.reload();
+            });
+            });
+
+            $("#loc").on('click', function (e) {
+                var type = $('#locHoaDon').val();
+                if (type != "*") {
+                    $.ajax({
+                        type: "get",
+                        url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/api/hoadons/GetHoaDon/")",
+                        data: {
+                            id: $("#IdUser").val(),
+                            loai: type
+                        },
+                        dataType: "json",
+                        success: function ($msg) {
+                            $("#lstHoaDon").html($msg);
+                            const lstXacNhanbtn = document.querySelectorAll("#xacNhan");
+                            const lstXacNhanbtn2 = document.querySelectorAll("#xacNhan2");
+                            const lstHuybtn = document.querySelectorAll("#Huy");
+
+                            lstXacNhanbtn.forEach((item, index) => item.addEventListener('click', () => {
+                                $.ajax({
+                                        method: "post",
+                                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/user/XacNhan")",
+                                    data: { id: lstIdHoaDon[index].value }
+                                }).done(function ($msg) {
+                                    alert($msg);
+                                        location.reload();
+                                    });
+                            }));
+
+                            lstXacNhanbtn2.forEach((item, index) => item.addEventListener('click', () => {
+                                $.ajax({
+                                        method: "post",
+                                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/user/XacNhan2")",
+                                    data: { id: lstIdHoaDon2[index].value }
+                                }).done(function ($msg) {
+                                    alert($msg);
+                                        location.reload();
+                                    });
+                            }));
+
+                            lstHuybtn.forEach((item, index) => item.addEventListener('click', () => {
+                                $.ajax({
+                                        method: "post",
+                                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/user/Huy")",
+                                    data: { id: lstIdHoaDon[index].value }
+                                }).done(function ($msg) {
+                                    alert($msg);
+                                        location.reload();
+                                    });
+                            }));
+                        }
+                    })
+                } else {
+                    location.reload();
+                }
+
+
+            })
+
+
+            $("#FileHinhAnh").on('change', function (e) {
+                var filePath = URL.createObjectURL(e.target.files[0]);
+                var filename = $("#FileHinhAnh").val().replace(/C:\\fakepath\\/i, '');
+                $(".img-avatar").attr("src", filePath);
+                $("#hinhAnh").val(filename);
+
+                var data = new FormData();
+                var selectedFiles = $("#FileHinhAnh")[0].files;
+                data.append("FileHinhAnh", selectedFiles[0]);
+                $.ajax({
+                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/user/capNhatAnh")",
+                    type: "post",
+                    processData: false,
+                    contentType: false,
+                    data: data,
+                    success: function ($msg) {
+                    }
+                });
+            })
+
+
+
+
+            lstXacNhanbtn.forEach((item, index) => item.addEventListener('click', () => {
+                $.ajax({
+                        method: "post",
+                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/user/XacNhan")",
+                    data: { id: lstIdHoaDon[index].value }
+                }).done(function ($msg) {
+                    alert($msg);
+                        location.reload();
+                    });
+            }));
+
+            lstXacNhanbtn2.forEach((item, index) => item.addEventListener('click', () => {
+                $.ajax({
+                        method: "post",
+                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/user/XacNhan2")",
+                    data: { id: lstIdHoaDon2[index].value }
+                }).done(function ($msg) {
+                    alert($msg);
+                        location.reload();
+                    });
+            }));
+
+            lstHuybtn.forEach((item, index) => item.addEventListener('click', () => {
+                $.ajax({
+                        method: "post",
+                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/user/Huy")",
+                    data: { id: lstIdHoaDon[index].value }
+                }).done(function ($msg) {
+                    alert($msg);
+                        location.reload();
+                    });
+            }));
+
+
+
+            $("#submit").on("click", function () {
+                var hoTen = $('#hoTen').val();
+                var sdt = $('#sdt').val();
+                var diachi = $('#diaChi').val();
+
+                if (hoTen != "" || sdt != "" || diachi != "") {
+                    $.ajax({
+                        method: "post",
+                        url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/user/capnhattt")",
+                        data: { HoTen: hoTen, DiaChi: diachi, SoDienThoai: sdt }
+                    }).done(function ($msg) {
+                        location.reload();
+                    });
+
+                } else {
+                    alert("Vui lòng nhập đầy đủ thông tin");
+                }
+
+            });
+
+        })
+
+    </script>
+}
+
+

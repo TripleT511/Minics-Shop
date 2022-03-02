@@ -1,0 +1,141 @@
+﻿@model _0306191074_TranThanhTam.Areas.Admin.Models.SanPham
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Sửa địa danh</h4>
+            <form class="forms-sample" asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="TenSanPham" class="control-label"></label>
+                    <input asp-for="TenSanPham" class="form-control text-light" />
+                    <span asp-validation-for="TenSanPham" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MoTa" class="control-label"></label>
+                    <textarea asp-for="MoTa" class="form-control text-dark editor" id="txtMoTa"></textarea>
+                    <span asp-validation-for="MoTa" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Gia" class="control-label"></label>
+                    <input asp-for="Gia" class="form-control text-light" />
+                    <span asp-validation-for="Gia" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LoaiSanPhamId" class="control-label"></label>
+                    <select asp-for="LoaiSanPhamId" class="form-control text-light" asp-items="ViewBag.LoaiSanPhamId"></select>
+                    <span asp-validation-for="LoaiSanPhamId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FileHinhAnh" class="control-label"></label>
+                    <input asp-for="HinhAnh" id="hinhAnh" class="form-control text-light" hidden />
+                    <input asp-for="FileHinhAnh" id="img" class="file-upload-default">
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control text-light file-upload-info" placeholder="Upload ảnh">
+                        <span class="input-group-append">
+                            <button class="file-upload-browse btn btn-primary" type="button">Upload hình ảnh</button>
+                        </span>
+                    </div>
+                    <span asp-validation-for="HinhAnh" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <img style="width: 200px;" id="imgPreview" src="~/images/sanpham/@Model.HinhAnh" alt="" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="MauSac" class="control-label"></label>
+                    <input asp-for="MauSac" class="form-control text-light" />
+                    <span asp-validation-for="MauSac" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ThuongHieu" class="control-label"></label>
+                    <input asp-for="ThuongHieu" class="form-control text-light" />
+                    <span asp-validation-for="ThuongHieu" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SoLuong" class="control-label"></label>
+                    <input asp-for="SoLuong" class="form-control text-light" />
+                    <span asp-validation-for="SoLuong" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="TrangThai" /> @Html.DisplayNameFor(model => model.TrangThai)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $("#img").on("change", function (e) {
+                var filePath = URL.createObjectURL(e.target.files[0]);
+                var filename = $("#img").val().replace(/C:\\fakepath\\/i, '');
+                $("#imgPreview").attr("src", filePath);
+                $("#hinhAnh").val(filename);
+            });
+
+            ClassicEditor.create(document.querySelector('.editor'), {
+
+                toolbar: {
+                    items: [
+                        'heading',
+                        '|',
+                        'bold',
+                        'italic',
+                        'link',
+                        'bulletedList',
+                        'numberedList',
+                        '|',
+                        'outdent',
+                        'indent',
+                        '|',
+                        'undo',
+                        'redo',
+                        'alignment',
+                        'fontBackgroundColor',
+                        'fontColor',
+                        'fontFamily',
+                        'fontSize',
+                        'imageInsert',
+                        'imageUpload'
+                    ]
+                },
+                language: 'vi',
+                image: {
+                    toolbar: [
+                        'imageTextAlternative',
+                        'imageStyle:inline',
+                        'imageStyle:block',
+                        'imageStyle:side',
+                        'linkImage'
+                    ]
+                },
+                licenseKey: '',
+
+
+
+            }).then(editor => {
+                window.editor = editor;
+
+            }).catch(error => {
+                console.error('Oops, something went wrong!');
+                console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+                console.warn('Build id: vfyda13refdk-szi4hnq4duwz');
+                console.error(error);
+            });
+        });
+    </script>
+}

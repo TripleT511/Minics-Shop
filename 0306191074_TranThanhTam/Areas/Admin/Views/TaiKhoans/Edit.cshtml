@@ -1,0 +1,92 @@
+﻿@model _0306191074_TranThanhTam.Areas.Admin.Models.TaiKhoan
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Sửa tài khoản</h4>
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="TenTaiKhoan" class="control-label"></label>
+                    <input asp-for="TenTaiKhoan" class="form-control text-light" />
+                    <span asp-validation-for="TenTaiKhoan" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MatKhau" class="control-label"></label>
+                    <input asp-for="MatKhau" class="form-control text-light" />
+                    <span asp-validation-for="MatKhau" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control text-light" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SoDienThoai" class="control-label"></label>
+                    <input asp-for="SoDienThoai" class="form-control text-light" />
+                    <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiaChi" class="control-label"></label>
+                    <input asp-for="DiaChi" class="form-control text-light" />
+                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HoTen" class="control-label"></label>
+                    <input asp-for="HoTen" class="form-control text-light" />
+                    <span asp-validation-for="HoTen" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="PhanQuyen" /> @Html.DisplayNameFor(model => model.PhanQuyen)
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FileHinhAnh" class="control-label"></label>
+                    <input asp-for="AnhDaiDien" id="hinhAnh" class="form-control text-light" hidden />
+                    <input asp-for="FileHinhAnh" id="img" class="file-upload-default">
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control text-light file-upload-info" placeholder="Upload ảnh">
+                        <span class="input-group-append">
+                            <button class="file-upload-browse btn btn-primary" type="button">Upload hình ảnh</button>
+                        </span>
+                    </div>
+                    <span asp-validation-for="AnhDaiDien" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <img style="width: 200px;" src="~/images/taikhoan/@Model.AnhDaiDien" id="imgPreview" alt="" />
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="TrangThai" /> @Html.DisplayNameFor(model => model.TrangThai)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $("#img").on("change", function (e) {
+                var filePath = URL.createObjectURL(e.target.files[0]);
+                var filename = $("#img").val().replace(/C:\\fakepath\\/i, '');
+                $("#imgPreview").attr("src", filePath);
+                $("#hinhAnh").val(filename);
+            });
+        });
+    </script>
+}

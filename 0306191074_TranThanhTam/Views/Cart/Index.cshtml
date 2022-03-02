@@ -1,0 +1,315 @@
+﻿@model IEnumerable<_0306191074_TranThanhTam.Areas.Admin.Models.GioHang>
+@using Microsoft.AspNetCore.Http;
+@*
+*@
+@{ ViewData["Title"] = "Cart";
+}
+@section CSS{
+    <style>
+        .itemside {
+            position: relative;
+            display: flex;
+            width: 100%;
+        }
+
+            .itemside .aside {
+                position: relative;
+                flex-shrink: 0;
+            }
+
+        .input-spinner {
+            max-width: 140px;
+            flex-wrap: nowrap;
+            display: inline-flex;
+        }
+
+        .itemside .info {
+            padding-left: .75rem;
+            flex-grow: 1;
+        }
+
+        strong.price, b.price, .b.price, .fw-bold.price {
+            color: #212529;
+        }
+
+        .img-md {
+            width: 96px;
+            height: 96px;
+        }
+
+        .itemside .title {
+            display: block;
+            margin-bottom: 0rem;
+            color: #51585E !important;
+        }
+
+        .dlist-align {
+            display: flex;
+        }
+
+            .dlist-align dt {
+                width: 150px;
+                word-wrap: break-word;
+                font-weight: normal;
+            }
+
+            .dlist-align dd {
+                flex-grow: 1;
+            }
+
+        .border-start {
+            border-left: 1px solid #dee2e6 !important;
+        }
+
+        .card-body {
+            flex: 1 1 auto;
+            padding: 1.25rem 1.25rem;
+        }
+
+        .input-spinner input.form-control {
+            text-align: center;
+            border-color: #dee2e6;
+            padding-left: 3px;
+            padding-right: 3px;
+        }
+
+        .btn-light {
+            background-color: #fff;
+            border-color: #dee2e6;
+            color: #212529;
+        }
+
+        .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+            margin-left: -1px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .input-group > .form-control, .input-group > .form-select {
+            position: relative;
+            flex: 1 1 auto;
+            width: 1%;
+            min-width: 0;
+        }
+
+        b, strong {
+            font-weight: 600;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: .43rem .84rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #51585e;
+            background-color: #f9f9f9;
+            background-clip: padding-box;
+            border: 1px solid #dee2e6;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            border-radius: .35rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        .btn-danger:hover {
+            color: #fff;
+        }
+    </style>
+}
+<section class="product_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Cart
+            </h2>
+        </div>
+        @{
+            var a = Model.Count();
+        }
+        @if (a != 0)
+        {
+            <div class="card">
+
+                <div class="row gx-0">
+                    <aside class="col-md-9">
+                        @foreach (var gioHang in Model)
+                        {
+                            <article class="card-body border-bottom" style="padding: 1rem">
+                                <div class="row gy-3">
+                                    <div class="col-md-7">
+                                        <div class="itemside">
+                                            <a href="#" class="aside">
+                                                <img src="~/images/sanpham/@Html.DisplayFor(modelItem => gioHang.SanPham.HinhAnh)" class="img-md img-thumbnail" />
+                                            </a>
+                                            <div class="info">
+                                                <a href="#" class="title">@Html.DisplayFor(modelItem => gioHang.SanPham.TenSanPham) </a>
+                                                <strong class="price d-block mb-2">@Html.DisplayFor(modelItem => gioHang.SanPham.Gia)</strong>
+                                                <div>
+                                                    <a id="remove" href="#" class="btn-link text-danger"> Remove </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- col.// -->
+                                    <div class="col-md-5">
+                                        <form method="post">
+                                            <input type="hidden" name="idSP" id="idSP" value="@Html.DisplayFor(modelItem => gioHang.SanPham.Id)" />
+                                            <input type="hidden" name="DonGia" id="donGiaSP" value="@gioHang.SanPham.Gia" />
+                                            <input type="hidden" id="maxSL" value="@gioHang.SanPham.SoLuong" />
+                                            <input type="hidden" id="idGioHang" name="idGioHang" value="@Html.DisplayFor(modelItem => gioHang.Id)" />
+                                        </form>
+                                        <div class="input-group input-spinner float-lg-end">
+                                            <button id="decrebtn" class="btn btn-light" type="button">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#999" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"></path></svg>
+                                            </button>
+                                            <input type="text" id="sl" class="form-control" value="@Html.DisplayFor(modelItem => gioHang.SoLuong)" />
+                                            <button id="increbtn" class="btn btn-light" type="button">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#999" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
+                                            </button>
+                                        </div>
+                                        <!-- input-group.// -->
+                                    </div>
+                                    <!-- col.// -->
+                                </div>
+                                <!-- row.// -->
+                            </article>
+
+                        }
+
+
+                        <div class="card-body border-top">
+                            <p class="mb-0">
+                                <i class="me-2 text-success fa fa-truck"></i>
+                                <font _mstmutation="1" _msthash="20488" _msttexthash="11487411">‎Giao hàng miễn phí trong vòng 1-2 tuần‎</font>
+                            </p>
+                        </div>
+                        <!-- card-group.// -->
+                    </aside>
+                    <!-- col.// -->
+                    <aside class="col-md-3 border-start">
+                        <div class="card-body">
+
+                            <dl class="dlist-align">
+                                <dt>Total price:</dt>
+                                @{
+                                    var tongTien = 0;
+                                    foreach (var item in Model)
+                                    {
+                                        tongTien += item.SoLuong * item.SanPham.Gia;
+                                    }
+
+                                }
+                                <dd class="text-end">
+                                    @String.Format("{0:#,##0} ₫", tongTien)
+                                </dd>
+                            </dl>
+
+                            <dl class="dlist-align">
+                                <dt>Total:</dt>
+                                <dd class="text-end text-dark h5">@String.Format("{0:#,##0} ₫", tongTien)</dd>
+                            </dl>
+                            <br />
+                            <form method="post">
+                                <input type="hidden" class="form-check-input" id="TongTien" name="TongTien" value="@tongTien" />
+                            </form>
+                            <a href="#" id="ThanhToan" class="btn btn-primary w-100"> Checkout </a>
+
+                            <a href="#" id="deleteCart" class="btn btn-danger w-100 mt-1"> Delete Cart </a>
+                        </div>
+                        <!-- card-body.// -->
+                    </aside>
+                    <!-- col.// -->
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <h2 class="text-center">Giỏ hàng trống</h2>
+        }
+         
+    </div>
+</section>
+
+@section JS {
+    <script>
+        var gioHang = document.querySelectorAll('#idGioHang');
+        var idSanPhams = document.querySelectorAll('#idSP');
+        var removes = document.querySelectorAll('#remove');
+        var donGias = document.querySelectorAll('#donGiaSP');
+        var maxSL = document.querySelectorAll('#maxSL');
+        var btnIncre = document.querySelectorAll('#increbtn');
+        var btnDecre = document.querySelectorAll('#decrebtn');
+        var lstValue = document.querySelectorAll('#sl');
+        var tongTien = $("#TongTien").val();
+        var lstCart = new Array;
+
+        idSanPhams.forEach((item, index) => {
+            lstCart.push({
+                id: idSanPhams[index].value,
+                dongia: donGias[index].value,
+                soluong: lstValue[index].value
+            });
+        })
+        removes.forEach((item, index) => item.addEventListener('click', () => {
+            $.ajax({
+                    method: "post",
+                url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/Cart/Xoa")",
+                data: { id: idSanPhams[index].value }
+            }).done(function ($msg) {
+                alert($msg);
+                    location.reload();
+                });
+        }))
+
+        $("#ThanhToan").on('click', () => {
+            $.ajax({
+                method: "post",
+                url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/Cart/ThanhToan")",
+                data: { values: JSON.stringify(lstCart), tongTien: tongTien },
+                dataType: "json",
+            }).done(function ($msg) {
+                alert($msg);
+                window.location.reload();
+            });
+            
+
+        })
+
+        btnIncre.forEach((item, index) => item.addEventListener('click', () => {
+             $.ajax({
+                    method: "post",
+                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/Cart/ThemSoLuong")",
+                 data: { idGioHang: gioHang[index].value, max: maxSL[index].value}
+             }).done(function ($msg) {
+                 if ($msg != "") {
+                     alert($msg);
+                 }
+                    location.reload();
+                });
+        }));
+
+        btnDecre.forEach((item, index) => item.addEventListener('click', () => {
+
+             $.ajax({
+                    method: "post",
+                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/Cart/GiamSoLuong")",
+                    data: { idGioHang: gioHang[index].value}
+                }).done(function ($msg) {
+                    location.reload();
+                });
+        }));
+
+        $('#deleteCart').on('click', () => {
+            $.ajax({
+                    method: "post",
+                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/Cart/XoaGioHang")",
+                }).done(function ($msg) {
+                    window.location.reload();
+                });
+        })
+
+    </script>
+}

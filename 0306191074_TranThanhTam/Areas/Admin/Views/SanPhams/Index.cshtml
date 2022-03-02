@@ -1,0 +1,125 @@
+﻿@model IEnumerable<_0306191074_TranThanhTam.Areas.Admin.Models.SanPham>
+
+@{
+    ViewData["Title"] = "Quàn lý sản phẩm";
+}
+@section CSS {
+<style>
+    .table {
+        table-layout: fixed !important;
+    }
+
+    .text-overflow {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    
+</style>
+}
+<div class="row">
+    <div class="col col-lg-6 col-md-12">
+        <form asp-action="Index" method="post" class="nav-link d-lg-flex search align-items-center">
+            <input type="text" id="txtSearch" name="txtSearch" class="form-control text-light" placeholder="Tìm kiếm">
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary m-1" />
+        </form>
+    </div>
+</div>
+<div class="page-header">
+    <h3 class="page-title"> Danh sách Sản phẩm </h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Create">Thêm Sản phẩm</a>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách Sản phẩm</li>
+        </ol>
+    </nav>
+</div>
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Bảng Sản phẩm</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TenSanPham)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.MoTa)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Gia)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LoaiSanPham)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.HinhAnh)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.MauSac)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ThuongHieu)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SoLuong)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TrangThai)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td class="text-wrap">
+                                    <a asp-area="" asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.TenSanPham)</a>
+                                </td>
+                                <td class="cell-4 text-overflow">
+                                    @Html.DisplayFor(modelItem => item.MoTa)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Gia)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoaiSanPham.TenLoaiSanPham)
+                                </td>
+                                <td>
+                                    <img src="~/images/sanpham/@Html.DisplayFor(modelItem => item.HinhAnh)" style="width: 100px !important; height: 100px; border-radius: 0;" alt="" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MauSac)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ThuongHieu)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SoLuong)
+                                </td>
+                                <td>
+                                    @if (item.TrangThai == true)
+                                    {
+                                        <span class="btn btn-outline-danger">Hot</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

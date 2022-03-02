@@ -1,0 +1,39 @@
+﻿@model _0306191074_TranThanhTam.Areas.Admin.Models.TaiKhoan
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{ Layout = "_Layout1";
+}
+<div class="card-body px-5 py-5">
+    <h3 class="card-title text-left mb-3">Login</h3>
+    <hr>
+    <form method="post" asp-action="Index">
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.Error
+            </div>
+        }
+        <div class="form-group">
+            <label>Email</label>
+            <input asp-for="Email" type="text" class="form-control p_input text-light" autofocus>
+
+        </div>
+        <div class="form-group">
+            <label>Password *</label>
+            <input asp-for="MatKhau" type="text" class="form-control p_input text-light">
+        </div>
+        <div class="form-group d-flex align-items-center justify-content-between">
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" name="nhomatkhau" class="form-check-input"> Remember me
+                </label>
+            </div>
+            <a href="" class="forgot-pass">Forgot password</a>
+        </div>
+        <div class="text-center">
+            <input type="submit" class="btn btn-primary btn-block enter-btn" value="Login">
+        </div>
+    </form>
+</div>
+

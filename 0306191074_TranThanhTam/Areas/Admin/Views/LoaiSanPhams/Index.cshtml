@@ -1,0 +1,115 @@
+﻿@model _0306191074_TranThanhTam.Areas.Admin.Models.LoaiSanPham
+
+@{
+    ViewData["Title"] = "Quản lý loại sản phẩm";
+}
+<div class="row">
+    <div class="col col-lg-6 col-md-12">
+        <form asp-action="Index" method="post" class="nav-link d-lg-flex search align-items-center">
+            <input type="text" id="txtSearch" name="txtSearch" class="form-control text-light m-1" placeholder="Tìm kiếm">
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary" />
+        </form>
+    </div>
+</div>
+<h3>Create</h3>
+<div class="row">
+    <div class="col-lg-12">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Tên loại sản phẩm</label>
+                <input name="TenLoaiSanPham" id="tenloai" class="form-control text-light" />
+                <span  class="text-danger">
+                </span>
+            </div>
+            <input type="hidden" class="form-check-input" checked asp-for="TrangThai" />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<h3>Edit</h3>
+<div class="row">
+    <div class="col-lg-12
+             ">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="TenLoaiSanPham" class="control-label"></label>
+                <input asp-for="TenLoaiSanPham" class="form-control text-light" />
+                <span asp-validation-for="TenLoaiSanPham" class="text-danger"></span>
+            </div>
+            <input class="form-check-input" asp-for="TrangThai" type="hidden" /> @Html.DisplayNameFor(model => model.TrangThai)
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<h3 class="page-title"> Danh sách Loại sản phẩm </h3>
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Bảng Loại sản phẩm</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Tên loại sản phẩm
+                                </th>
+                                <th>
+                                    Tổng số sản phẩm hiện có
+                                </th>
+                                <th>
+                                    Trạng thái
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.LstSanPham)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.TenLoaiSanPham
+                                    </td>
+                                    <td>
+                                        @item.SanPhams.Count
+                                    </td>
+                                    <td>
+                                        @if (item.TrangThai == true)
+                                        {
+                                            <span class="btn btn-outline-primary">Đang sử dụng</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="btn btn-outline-warning">Không sử dụng</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Index" asp-route-id="@item.Id">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section JS {
+    <script>
+       
+        </script>
+
+}
+

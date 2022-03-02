@@ -1,0 +1,413 @@
+﻿@model _0306191074_TranThanhTam.Areas.Admin.Models.SanPham
+@using Microsoft.AspNetCore.Http;
+@*
+
+*@
+@{ ViewData["Title"] = "Cart";
+}
+
+@section CSS{
+    <style>
+        dl[class=row] dt {
+            color: #212529;
+        }
+
+        dt {
+            font-weight: 600;
+        }
+
+        .text-dark {
+            color: #212529 !important;
+        }
+
+        .padding-y {
+            border-bottom: 30px solid #e9ecef;
+            padding-top: 60px !important;
+            padding-bottom: 60px !important;
+        }
+
+        .title {
+            color: #212529 !important;
+            line-height: 1.25;
+        }
+
+        .btn-warning {
+            color: #fff;
+            background-color: #ff8100;
+            border-color: #ff8100;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+
+        .icontext .icon {
+            position: relative;
+            margin-right: 10px;
+            flex-shrink: 0;
+            flex-grow: 0;
+        }
+
+        .ratings {
+            padding: 20px;
+        }
+
+        .product-rating {
+            font-size: 50px
+        }
+
+        .stars i {
+            font-size: 18px;
+            color: #ffc107;
+        }
+
+        .rating-text {
+            margin-top: 10px;
+        }
+
+        .component-rating {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .btn-primary:hover, .btn-warning:hover {
+            color: #fff !important;
+        }
+
+        .rate {
+            float: left;
+            height: 46px;
+            padding: 0 10px;
+        }
+
+            .rate:not(:checked) > input {
+                position: absolute;
+                top: -9999px;
+            }
+
+            .rate:not(:checked) > label {
+                float: right;
+                width: 1em;
+                overflow: hidden;
+                white-space: nowrap;
+                cursor: pointer;
+                font-size: 30px;
+                color: #ccc;
+            }
+
+                .rate:not(:checked) > label:before {
+                    content: '★ ';
+                }
+
+            .rate > input:checked ~ label {
+                color: #ffc700;
+            }
+
+            .rate:not(:checked) > label:hover,
+            .rate:not(:checked) > label:hover ~ label {
+                color: #deb217;
+            }
+
+            .rate > input:checked + label:hover,
+            .rate > input:checked + label:hover ~ label,
+            .rate > input:checked ~ label:hover,
+            .rate > input:checked ~ label:hover ~ label,
+            .rate > label:hover ~ input:checked ~ label {
+                color: #c59b08;
+            }
+    </style>
+}
+
+<section class="padding-y bg-white shadow-sm layout_padding">
+    <div class="container">
+        <div class="row">
+            <aside class="col-lg-6">
+                <article class="gallery-wrap">
+                    <div class="img-big-wrap img-thumbnail">
+                        <a href="#">
+                            <img style="object-fit: cover;" height="400" class="w-100" src="~/images/sanpham/@Html.DisplayFor(model => model.HinhAnh)">
+                        </a>
+                    </div>
+                </article>
+            </aside>
+            <div class="col-lg-6">
+                <article class="ps-lg-3">
+                    <h4 class="title text-dark">@Html.DisplayFor(model => model.TenSanPham)</h4>
+                    <div class="stars mt-1 mb-1">
+                        @if (Model.DanhGias.Count > 0)
+                            for (int i = 0; i < ((int)Model.DanhGias.Average(dg => dg.SaoDanhGia)); i++)
+                            {
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            }
+                    </div>
+                    <div class="mb-3 mt-1"> <span class="price h5" style="color: rgb(25, 57, 196);">@Html.DisplayFor(model => model.Gia)</span></div>
+                    <p style="color: #51585E">@Html.Raw(Model.MoTa)</p>
+                    <dl class="row">
+                        <dt class="col-3">Loại sản phẩm</dt>
+                        <dd class="col-9">@Html.DisplayFor(model => model.LoaiSanPham.TenLoaiSanPham)</dd>
+                        <dt class="col-3">Thương hiệu</dt>
+                        <dd class="col-9">@Html.DisplayFor(model => model.ThuongHieu)</dd>
+                        <dt class="col-3">Màu sắc</dt>
+                        <dd class="col-9">@Html.DisplayFor(model => model.MauSac)</dd>
+                        <dt class="col-3">Số lượng:</dt>
+                        <dd class="col-9">@Html.DisplayFor(model => model.SoLuong)</dd>
+                    </dl>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12 d-flex align-items-center mb-3">
+                            <div class="input-group" style="max-width: 200px;">
+                                <button class="btn btn-icon btn-light" id="btnDecre" type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#999" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"></path></svg>
+                                </button>
+                                <input class="form-control text-center" id="soLuong" readonly="" placeholder="" value="1" />
+                                <button class="btn btn-icon btn-light" id="btnIncre" type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#999" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.SoLuong > 0)
+                    {
+                        <form method="post">
+                            <input type="hidden" id="maxSL" value="@Model.SoLuong" />
+                            <input type="hidden" class="form-check-input" id="TaiKhoanId" name="TaiKhoanId" value="@Context.Session.GetString("idTaiKhoan")" />
+                            <input type="hidden" class="form-check-input" id="SanPhamId" name="SanPhamId" value="@Html.DisplayFor(model => model.Id)" />
+                            <input type="hidden" class="form-check-input" id="sl" name="SoLuong" value="1" />
+                            <input type="text" class="btn btn-primary" style="cursor: pointer" id="submit" value="Thêm vào giỏ hàng" readonly>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-secondary">Sản phẩm đã hết hàng</span>
+                    }
+
+
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="padding-y bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Đánh giá</h5>
+                        <hr />
+                        @if (Model.DanhGias != null)
+                        {
+                            @foreach (var danhgia in Model.DanhGias)
+                            {
+                                if (danhgia.TrangThai == true)
+                                {
+                                    <blockquote class="border-bottom">
+                                        <div class="icontext d-flex">
+                                            <img src="~/images/taikhoan/@Html.DisplayFor(modelItem => danhgia.TaiKhoan.AnhDaiDien)" width="40" height="40" class="img-xs icon rounded-circle" />
+                                            <div class="text">
+                                                <h6 class="mb-0">@Html.DisplayFor(modelItem => danhgia.TaiKhoan.HoTen)</h6>
+                                                <div class="stars">
+                                                    @for (int i = 0; i < danhgia.SaoDanhGia; i++)
+                                                    {
+                                                        <i class="fa fa-star"></i>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="mt-3">
+                                            <p style="color: #51585e;">
+                                                @Html.DisplayFor(modelItem => danhgia.NoiDung)
+                                            </p>
+                                        </div>
+                                    </blockquote>
+                                }
+
+                            }
+                        }
+
+
+                    </div>
+                </div>
+                @if (Context.Session.GetString("taiKhoan") == "true")
+                {
+                    <div class="card">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Đánh giá sản phẩm</h5>
+                            <div class="rate">
+                                <input type="radio" id="star5" name="rate" value="5" />
+                                <label for="star5" title="text">5 stars</label>
+                                <input type="radio" id="star4" name="rate" value="4" />
+                                <label for="star4" title="text">4 stars</label>
+                                <input type="radio" id="star3" name="rate" value="3" />
+                                <label for="star3" title="text">3 stars</label>
+                                <input type="radio" id="star2" name="rate" value="2" />
+                                <label for="star2" title="text">2 stars</label>
+                                <input type="radio" id="star1" name="rate" value="1" />
+                                <label for="star1" title="text">1 star</label>
+                            </div>
+                            <form method="post">
+                                <input type="hidden" id="rating" name="SaoDanhGia" />
+                                <div class="mb-3">
+                                    <textarea id="txtArea" class="form-control" placeholder="Nhập nội dung đánh giá"></textarea><br>
+                                </div>
+                                <input type="text" id="thembinhluan" style="cursor: pointer" class="btn btn-primary" value="Gửi đánh giá" readonly />
+                            </form>
+                        </div>
+                    </div>
+
+                }
+
+
+            </div>
+            <div class="col-lg-5">
+                <article class="card">
+                    <div class="card-body" style="padding: 1rem">
+                        <div class="component-rating">
+                            <div class="ratings">
+                                <span class="product-rating">
+                                    @(Model.DanhGias.Count != 0 ? Model.DanhGias.Average(tb => tb.SaoDanhGia) : 0)
+
+                                </span><span>/5</span>
+                                <div class="stars">
+                                    @if (Model.DanhGias.Count > 0)
+                                        for (int i = 0; i < ((int)Model.DanhGias.Average(dg => dg.SaoDanhGia)); i++)
+                                        {
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        }
+                                </div>
+                                <div class="rating-text">
+                                    <span>
+                                        @(Model.DanhGias.Count != 0 ? Model.DanhGias.Count : 0)
+                                        reviews
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.DanhGias.Count != 0)
+                        {
+                            <table class="table table-borderless table-sm">
+                                <tbody>
+                                    <tr valign="middle">
+                                        <td width="50">5 <i class="fa fa-star" style="color: #ffc107;"></i></td>
+                                        <td>
+                                            <div class="progress" style="height: 10px;"><div class="progress-bar bg-warning" role="progressbar" style="width: @(Model.DanhGias.Count(dg => dg.SaoDanhGia == 5) * 100 /Model.DanhGias.Count)%;" aria-valuenow="25" aria-valuemax="100"></div></div>
+                                        </td>
+                                        <td width="30">@(Model.DanhGias.Count(dg => dg.SaoDanhGia == 5) * 100 /Model.DanhGias.Count)%</td>
+                                    </tr>
+                                    <tr valign="middle">
+                                        <td>4 <i class="fa fa-star" style="color: #ffc107;"></i></td>
+                                        <td>
+                                            <div class="progress" style="height: 10px;"><div class="progress-bar bg-warning" role="progressbar" style="width: @(Model.DanhGias.Count(dg => dg.SaoDanhGia == 4) * 100 /Model.DanhGias.Count)%;" aria-valuenow="80" aria-valuemax="100"></div></div>
+                                        </td>
+                                        <td> @(Model.DanhGias.Count(dg => dg.SaoDanhGia == 4) * 100 /Model.DanhGias.Count)%</td>
+                                    </tr>
+                                    <tr valign="middle">
+                                        <td>3 <i class="fa fa-star" style="color: #ffc107;"></i></td>
+                                        <td>
+                                            <div class="progress" style="height: 10px;"><div class="progress-bar bg-warning" role="progressbar" style="width: @(Model.DanhGias.Count(dg => dg.SaoDanhGia == 3) * 100 /Model.DanhGias.Count)%;" aria-valuenow="35" aria-valuemax="100"></div></div>
+                                        </td>
+                                        <td>@(Model.DanhGias.Count(dg => dg.SaoDanhGia == 3) * 100 /Model.DanhGias.Count)%</td>
+                                    </tr>
+                                    <tr valign="middle">
+                                        <td>2 <i class="fa fa-star" style="color: #ffc107;"></i></td>
+                                        <td>
+                                            <div class="progress" style="height: 10px;"><div class="progress-bar bg-warning" role="progressbar" style="width: @(Model.DanhGias.Count(dg => dg.SaoDanhGia == 2) * 100 /Model.DanhGias.Count)%;" aria-valuenow="13" aria-valuemax="100"></div></div>
+                                        </td>
+                                        <td>@(Model.DanhGias.Count(dg => dg.SaoDanhGia == 2) * 100 /Model.DanhGias.Count)%</td>
+                                    </tr>
+                                    <tr valign="middle">
+                                        <td>1 <i class="fa fa-star" style="color: #ffc107;"></i></td>
+                                        <td>
+                                            <div class="progress" style="height: 10px;"><div class="progress-bar bg-warning" role="progressbar" style="width: @(Model.DanhGias.Count(dg => dg.SaoDanhGia == 1) * 100 /Model.DanhGias.Count)%;" aria-valuenow="5" aria-valuemax="100"></div></div>
+                                        </td>
+                                        <td>@(Model.DanhGias.Count(dg => dg.SaoDanhGia == 1) * 100 /Model.DanhGias.Count)%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section JS {
+    <script>
+        var countRating = document.querySelector('.product-rating');
+        var max = $("#maxSL").val();
+        countRating.innerHTML = Number.parseFloat(countRating.innerHTML).toFixed(1);
+        $(window).ready(function () {
+            $('#rating').val('5');
+            $(".rate input").on("click", function (e) {
+                $('#rating').val(e.target.value);
+            });
+            const inputSoLuong = $('#soLuong');
+            let soLuong = inputSoLuong.val();
+            $('#btnIncre').on('click', function () {
+                if (soLuong >= max) {
+                    alert("Đã vượt tối đa số lượng sản phẩm hiện có");
+                    return;
+                }
+                soLuong++;
+                inputSoLuong.val(soLuong);
+                $('#sl').val(soLuong);
+            })
+
+            $('#btnDecre').on('click', function () {
+                if (inputSoLuong.val() == 0) {
+                    return;
+                }
+                soLuong--;
+                inputSoLuong.val(soLuong);
+                $('#sl').val(soLuong);
+
+            })
+            var id = $('#TaiKhoanId').val();
+            var sanPhamId = $('#SanPhamId').val();
+
+            $("#submit").on("click", function () {
+                if (id != "") {
+                    $.ajax({
+                        method: "post",
+                        url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+"/Product/ThemGioHang")",
+                        data: { TaiKhoanId: id, SanPhamId: sanPhamId, SoLuong: soLuong }
+                    }).done(function ($msg) {
+                        location.reload();
+                    });
+                } else {
+                    alert("Vui lòng đăng nhập");
+
+                }
+
+                return;
+            });
+
+            $("#thembinhluan").on("click", function () {
+                var noiDung = $("#txtArea").val();
+                if (noiDung != "") {
+                    $.ajax({
+                        method: "post",
+                        url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/Product/ThemDanhGia")",
+                        data: { TaiKhoanId: id, SanPhamId: sanPhamId, NoiDung: noiDung, SaoDanhGia: $('#rating').val()}
+                    }).done(function ($msg) {
+                        location.reload();
+                    });
+                } else {
+                    alert("Vui lòng nhập nội dung đánh giá");
+                }
+
+            });
+
+        })
+
+    </script>
+}

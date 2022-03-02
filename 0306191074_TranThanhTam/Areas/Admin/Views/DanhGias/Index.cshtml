@@ -1,0 +1,117 @@
+﻿@model IEnumerable<_0306191074_TranThanhTam.Areas.Admin.Models.DanhGia>
+
+@{
+    ViewData["Title"] = "Quản lý Đánh giá";
+}
+<div class="row">
+    <div class="col col-lg-6 col-md-12">
+        <form asp-action="Index" method="post" class="nav-link d-lg-flex search align-items-center">
+            <input type="text" id="txtSearch" name="txtSearch" class="form-control text-light" placeholder="Tìm kiếm">
+            <select class="form-control text-light m-1" name="loai">
+                <option value="0">--Chọn--</option>
+                <option value="5">5 sao</option>
+                <option value="4">4 sao</option>
+                <option value="3">3 sao</option>
+                <option value="2">2 sao</option>
+                <option value="1">1 sao</option>
+            </select>
+            <input type="submit" value="Tìm kiếm" class="btn btn-primary m-1" />
+        </form>
+    </div>
+</div>
+<div class="page-header">
+    <h3 class="page-title"> Danh sách Đánh giá </h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Create">Thêm Đánh giá</a>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách Đánh giá</li>
+        </ol>
+    </nav>
+</div>
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Bảng Đánh giá</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TaiKhoan)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SanPham)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.NoiDung)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SaoDanhGia)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TrangThai)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-area="" asp-controller="Product" asp-action="Detail" asp-route-id="@item.SanPhamId">@Html.DisplayFor(modelItem => item.TaiKhoan.HoTen)</a>
+                                    </td>
+                                    <td>
+                                        <img src="~/images/sanpham/@Html.DisplayFor(modelItem => item.SanPham.HinhAnh)" style="width: 200px !important; height: 100px; border-radius: 0;" alt="" />
+                                    </td>
+                                    <td class="text-wrap">
+                                        @Html.DisplayFor(modelItem => item.NoiDung)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SaoDanhGia)
+                                    </td>
+                                    <td>
+                                        @if (item.TrangThai == true)
+                                        {
+                                            <span class="btn btn-outline-primary">Được hiển thị</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="btn btn-outline-warning">Không được hiển thị</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section JS {
+    <script>
+        $("#CapNhat").on('click', () => {
+            $.ajax({
+                    method: "post",
+                url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/admin/danhgias/xacnhan")",
+                data: { id: $("#idDG").val() },
+
+            }).done(function ($msg) {
+                alert($msg);
+                    location.reload();
+            });
+            
+
+        })
+    </script>
+
+
+}

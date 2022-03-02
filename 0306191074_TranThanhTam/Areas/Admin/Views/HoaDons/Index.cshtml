@@ -1,0 +1,180 @@
+﻿@model IEnumerable<_0306191074_TranThanhTam.Areas.Admin.Models.HoaDon>
+
+@{
+    ViewData["Title"] = "Quản lý hoá đơn";
+}
+@section CSS {
+    <style>
+        .text-overflow {
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    </style>
+}
+<div class="page-header">
+    <h3 class="page-title"> Danh sách Hoá đơn </h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Danh sách Hoá đơn</li>
+        </ol>
+    </nav>
+</div>
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title">Bảng Hoá đơn</h4>
+                    <div class="d-flex">
+                        <form asp-action="Index" class="d-flex" method="post" >
+                            <input type="date" name="ngayXuatHD" class="form-control text-light m-1" value="" />
+                            <select  name="loai" class="form-control text-light" style="margin-right: 5px">
+                                <option value="6">Chọn loại hoá đơn</option>
+                                <option value="0">Đang chờ duyệt</option>
+                                <option value="1">Đang chờ người dùng xác nhận</option>
+                                <option value="2">Đang chờ vận chuyển</option>
+                                <option value="3">Đang vận chuyển</option>
+                                <option value="4">Đã giao hàng</option>
+                                <option value="5">Đã huỷ</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary text-light" >Lọc</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead >
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Account)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.NgayXuatHD)
+                                </th>
+                                <th>
+                                    Sản phẩm
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DiaChiGH)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SoDienThoai)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TongTien)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TrangThai)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="lstHoaDon">
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Account.HoTen)
+                                    </td>
+                                    <td class="text-wrap">
+                                        @Html.DisplayFor(modelItem => item.NgayXuatHD)
+                                    </td>
+                                    <td >
+                                        @foreach (var cthd in item.ChiTietHoaDons)
+                                        {
+                                            <li>
+                                                <span class=" text-wrap text-overflow">@cthd.SanPham.TenSanPham</span>
+                                         <strong> x @cthd.SoLuong </strong>.</li>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DiaChiGH)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SoDienThoai)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TongTien)
+                                    </td>
+                                    <td>
+
+                                        @if (item.TrangThai == 0)
+                                        {
+                                            <input type="hidden" id="idHD" value="@item.Id" />
+                                            <a id="CapNhat" class="btn btn-primary text-light text-decoration-none">Duyệt đơn hàng</a>
+                                        }
+                                        else if (item.TrangThai == 1)
+                                        {
+                                            <span class="text-primary">Đang chờ người dùng xác nhận</span>
+                                        }
+                                        else if (item.TrangThai == 2)
+                                        {
+                                            <input type="hidden" id="idHD" value="@item.Id" />
+                                            <a id="BanGiao" class="btn btn-primary text-light text-decoration-none">Bàn giao cho đơn vị vận chuyển</a>
+                                        }
+                                        else if (item.TrangThai == 3)
+                                        {
+                                            <span class="text-success">Đang vận chuyển</span>
+                                        }
+                                        else if (item.TrangThai == 5)
+                                        {
+                                            <span class="text-danger">Đã huỷ</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">Giao hàng thành công</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section JS {
+    <script>
+        const lstBtnCapNhat = document.querySelectorAll("#CapNhat");
+        const lstBtnBanGiao = document.querySelectorAll("#BanGiao");
+
+        const lstIdHoaDon = document.querySelectorAll("#idHD");
+
+        lstBtnCapNhat.forEach((item, index) => item.addEventListener('click', () => {
+            $.ajax({
+                    method: "post",
+                url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/admin/hoadons/xacnhan")",
+                data: { id: lstIdHoaDon[index].value },
+
+            }).done(function ($msg) {
+                alert($msg);
+                    location.reload();
+                });
+        }));
+
+        lstBtnBanGiao.forEach((item, index) => item.addEventListener('click', () => {
+            $.ajax({
+                    method: "post",
+                url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/admin/hoadons/bangiao")",
+                data: { id: lstIdHoaDon[index].value },
+
+            }).done(function ($msg) {
+                alert($msg);
+                    location.reload();
+                });
+        }));
+
+    </script>
+
+
+}
+

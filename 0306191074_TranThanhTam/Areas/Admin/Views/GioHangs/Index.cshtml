@@ -1,0 +1,62 @@
+﻿@model IEnumerable<_0306191074_TranThanhTam.Areas.Admin.Models.GioHang>
+
+@{
+    ViewData["Title"] = "Quản lý Giỏ hàng";
+}
+<div class="page-header">
+    <h3 class="page-title"> Danh sách Giỏ hàng </h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Danh sách Giỏ hàng</li>
+        </ol>
+    </nav>
+</div>
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Bảng Giỏ hàng</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Account)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SanPham)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.SoLuong)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Account.HoTen)
+                                    </td>
+                                    <td>
+                                        <img src="~/images/sanpham/@Html.DisplayFor(modelItem => item.SanPham.HinhAnh)" style="width: 200px !important; height: 100px; border-radius: 0;" alt="" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SoLuong)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

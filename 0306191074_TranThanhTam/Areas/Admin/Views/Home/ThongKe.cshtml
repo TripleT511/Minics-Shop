@@ -1,0 +1,418 @@
+﻿@model _0306191074_TranThanhTam.Areas.Admin.Models.ChiTietHoaDon
+@*
+*@
+@{ ViewBag.Title = "Dashboard";
+}
+<div class="row justify-content-center">
+    <div class="col-sm-4 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h5>Tổng số tài khoản</h5>
+                <div class="row">
+                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                        <div class="d-flex d-sm-block d-md-flex align-items-center">
+                            <h2 class="mb-0">@ViewBag.CountTK</h2>
+                            @* <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>*@
+                        </div>
+                        @*<h6 class="text-muted font-weight-normal">11.38% Since last month</h6>*@
+                    </div>
+                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                        <i class="icon-lg mdi mdi-account-multiple text-primary ml-auto"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h5>Tổng số sản phẩm</h5>
+                <div class="row">
+                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                        <div class="d-flex d-sm-block d-md-flex align-items-center">
+                            <h2 class="mb-0">@ViewBag.CountSP</h2>
+                        </div>
+                    </div>
+                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                        <i class="icon-lg mdi mdi-map text-danger ml-auto"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h5>Tổng số loại sản phẩm</h5>
+                <div class="row">
+                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                        <div class="d-flex d-sm-block d-md-flex align-items-center">
+                            <h2 class="mb-0">@ViewBag.CountLoaiSP</h2>
+                        </div>
+                    </div>
+                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                        <i class="icon-lg mdi mdi-wallet-travel text-success ml-auto"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h5>Tổng số đánh giá</h5>
+                <div class="row">
+                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                        <div class="d-flex d-sm-block d-md-flex align-items-center">
+                            <h2 class="mb-0">@ViewBag.CountDG</h2>
+                        </div>
+                    </div>
+                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                        <i class="icon-lg mdi mdi-newspaper text-warning ml-auto"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h5>Tổng số hoá đơn tháng này</h5>
+                <div class="row">
+                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                        <div class="d-flex d-sm-block d-md-flex align-items-center">
+                            <h2 class="mb-0">@ViewBag.CountHD</h2>
+                        </div>
+                    </div>
+                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                        <i class="icon-lg mdi mdi-message-text text-primary ml-auto"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h5>Tổng doanh thu tháng này</h5>
+                <div class="row">
+                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                        <div class="d-flex d-sm-block d-md-flex align-items-center">
+                            <h2 class="mb-0">@ViewBag.CountDT</h2>
+                        </div>
+                    </div>
+                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                        <i class="icon-lg mdi mdi-chart-line text-success ml-auto"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div id="data">
+
+    </div>
+    <div class="col col-lg-5 mb-2" style="margin:auto;">
+        <canvas id="myChart" width="80" height="80"></canvas>
+    </div>
+    <div class="col col-lg-7 mb-2" style="margin:auto;">
+        <input type="hidden" id="data1" value="@ViewBag.DT1" />
+        <input type="hidden" id="data2" value="@ViewBag.DT2" />
+        <input type="hidden" id="data3" value="@ViewBag.DT3" />
+        <input type="hidden" id="data4" value="@ViewBag.DT4" />
+        <input type="hidden" id="data5" value="@ViewBag.DT5" />
+
+        <canvas id="myChart2" width="150" height="100"></canvas>
+    </div>
+
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title">Danh sách sản phẩm bán chạy nhất tháng này</h4>
+                    <div class="d-flex">
+                        <select id="top" class="form-control text-light" style="margin-right: 5px">
+                            <option value="5">Top 5</option>
+                            <option value="10">Top 10</option>
+                            <option value="15">Top 15</option>
+                        </select>
+                        <a class="d-block btn btn-primary text-light" href="#" id="LocSP">Lọc</a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Top
+                                </th>
+                                <th>
+                                    Tên sản phẩm
+                                </th>
+                                <th>
+                                    Loại sản phẩm
+                                </th>
+                                <th>
+                                    Số lượng bán ra
+                                </th>
+                                <th>
+                                    Tổng tiền
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="lstSanPham">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Thống kê doanh số bán hàng theo từng sản phẩm</h4>
+                    <div class="d-flex">
+                        <select asp-for="SanPhamId" class="form-control text-light" asp-items="ViewBag.SanPhamId" style="margin-right: 5px"></select>
+                        <input type="date" class="form-control text-light" style="margin-right: 5px" value="" id="startSP" />
+                        <input type="date" class="form-control text-light" style="margin-right: 5px" value="" id="endSP" />
+                        <a class="d-block btn btn-primary text-light" href="#" id="Loc3">Lọc</a>
+                    </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Tên sản phẩm
+                                </th>
+                                <th>
+                                    Loại sản phẩm
+                                </th>
+                                <th>
+                                    Số lượng bán ra
+                                </th>
+                                <th>
+                                    Tổng tiền
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="lstSanPham2">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title">Thống kê doanh thu</h4>
+                    <div class="d-flex">
+                        <input type="date" class="form-control text-light" style="margin-right: 5px" value="" id="start" />
+                        <input type="date" class="form-control text-light" style="margin-right: 5px" value="" id="end" />
+                        <a class="d-block btn btn-primary text-light" href="#" id="Loc">Lọc</a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Mã hoá đơn
+                                </th>
+                                <th>
+                                    Tài khoản
+                                </th>
+                                <th>
+                                    Sản phẩm
+                                </th>
+                                <th>
+                                    Địa chỉ GH
+                                </th>
+                                <th>
+                                    Ngày bán
+                                </th>
+                                <th>
+                                    Tổng tiền
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="lstHoaDon">
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 20px; text-align: end;">
+                    <h4>Tổng doanh thu: <span id="tong" class="text-success"></span> </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@section JS {
+    <script>
+        $(document).ready(function () {
+            $("#Loc").on('click', function (e) {
+                if ($('#start').val() != "" && $('#end').val() != "") {
+                    $.ajax({
+                        type: "get",
+                        url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/api/hoadons/ThongKe/")",
+                        data: {
+                            start: $("#start").val(),
+                            end: $("#end").val()
+                        },
+                        dataType: "json",
+                        success: function ($msg) {
+                            $('#lstHoaDon').html($msg);
+                            $("#tong").html($("#tongDT").val());
+
+                        }
+                    })
+                }
+            });
+
+            const ctx2 = document.getElementById('myChart2').getContext('2d');
+            const myChart2 = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Tháng 1',
+                        'Tháng 2',
+                        'Tháng 3',
+                        'Tháng 4',
+                        'Tháng 5',
+                        'Tháng 6',
+                        'Tháng 7',
+                        'Tháng 8',
+                        'Tháng 9',
+                        'Tháng 10',
+                        'Tháng 11',
+                        'Tháng 12',
+
+                    ],
+                    datasets: [{
+                        label: 'Thống kê doanh thu các tháng trong năm',
+                        data: [$('#data1').val(), $('#data2').val(), $('#data3').val(), $('#data4').val(), $('#data5').val()],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 205, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 159, 64)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                            'rgb(153, 102, 255)',
+                            'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/api/hoadons/ThongKeChart/")",
+                dataType: "json",
+                success: function ($msg) {
+                    $("#data").html($msg);
+                    const ctx = document.getElementById('myChart').getContext('2d');
+                    const countHuy = $('#lstHuy').val();
+                    const countTC = $('#lstTC').val();
+                    const countCho = $('#lstCho').val();
+                    const myChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: [
+                                'Đơn hàng đang chờ',
+                                'Đơn hàng giao thành công',
+                                'Đơn hàng bị huỷ',
+                            ],
+                            datasets: [{
+                                label: 'Thống kê đơn hàng',
+                                data: [countCho, countTC, countHuy],
+                                backgroundColor: [
+                                    'rgb(0, 102, 255)',
+                                    'rgb(12, 198, 0)',
+                                    'rgb(255, 0, 78)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+
+                }
+            });
+
+            $.ajax({
+                type: "get",
+                url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/api/hoadons/ThongKeSanPham/")",
+                dataType: "json",
+                data: { top: $('#top').val() },
+                success: function ($msg) {
+                    $('#lstSanPham').html($msg);
+                }
+            });
+
+            $('#LocSP').on('click', function () {
+                $.ajax({
+                    type: "get",
+                    url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/api/hoadons/ThongKeSanPham/")",
+                    dataType: "json",
+                    data: { top: $('#top').val() },
+                    success: function ($msg) {
+                        $('#lstSanPham').html($msg);
+                    }
+                })
+            });
+
+            $('#Loc3').on('click', function () {
+                var id = $('#SanPhamId').val();
+                var start = $('#startSP').val();
+                var end = $('#endSP').val();
+                if (start != "" && end != "") {
+                    $.ajax({
+                        type: "get",
+                        url: "@((Context.Request.IsHttps?"https://":"http://")+Context.Request.Host+ "/api/hoadons/ThongKeTheoSP/")",
+                        dataType: "json",
+                        data: { sanPhamId: id, start: start, end: end },
+                        success: function ($msg) {
+                            $('#lstSanPham2').html($msg);
+                        }
+                    });
+
+                }
+            });
+        });
+
+    </script>
+
+}

@@ -1,0 +1,72 @@
+﻿@model PagedList.IPagedList<_0306191074_TranThanhTam.Areas.Admin.Models.SanPham>
+@using Microsoft.AspNetCore.Http;
+@using PagedList.Mvc;
+@*
+
+*@
+@{ ViewData["Title"] = "Products";
+}
+
+</div>
+<section class="product_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Our Products
+            </h2>
+        </div>
+        <div class="row">
+            @foreach (var sanpham in Model)
+            {
+
+                <div class="col-sm-6 col-lg-4">
+                    <div class="box">
+                        <div class="img-box">
+                            <img src="~/images/sanpham/@Html.DisplayFor(modelItem => sanpham.HinhAnh)" alt="">
+                        </div>
+                        <div class="detail-box">
+                            <h5>
+                                <a asp-controller="Product" asp-action="Detail" asp-route-id="@sanpham.Id" class="text-decoration-none text-dark ">
+                                    @Html.DisplayFor(modelItem => sanpham.TenSanPham)
+                                </a>
+                            </h5>
+                            <div class="product_info">
+                                <h5>
+                                    <span class="font-weight-medium" style="color: rgb(25, 57, 196);">@Html.DisplayFor(modelItem => sanpham.Gia)</span>
+                                </h5>
+                                <div class="star_container">
+                                    @if (sanpham.DanhGias.Count > 0)
+                                        for (int i = 0; i < ((int)sanpham.DanhGias.Average(dg => dg.SaoDanhGia)); i++)
+                                        {
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="d-flex justify-content-center " style="gap: 10px;">
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <form asp-controller="Product" asp-action="Index" method="post">
+                    <input type="hidden" name="pageCount" value="@Model.PageCount" class="form-control" >
+                    <input type="hidden" name="page" value="@i" class="form-control" >
+                    <input type="hidden" value="@ViewBag.Loai" name="Loai" class="form-control" >
+                    <button class="btn @(ViewBag.PageNumber == i ? "btn-primary" : "btn-outline-primary") " type="submit">
+                        @i
+                    </button>
+                </form>
+            }
+        </div>
+    </div>
+</section>
+
+@section JS {
+    <script>
+
+
+    </script>
+}
