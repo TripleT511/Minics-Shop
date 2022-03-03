@@ -67,6 +67,7 @@ namespace _0306191074_TranThanhTam.Controllers
                     HttpContext.Session.SetString("taiKhoanad", "true");
                     HttpContext.Session.SetString("TenTaiKhoan", data[0].TenTaiKhoan);
                     HttpContext.Session.SetString("idTaiKhoan", data[0].Id.ToString());
+                    HttpContext.Session.SetString("Avatar", data[0].AnhDaiDien);
                     HttpContext.Session.SetString("token", System.Convert.ToBase64String(plainTextBytes));
                     HttpContext.Session.SetInt32("Role", data[0].PhanQuyen == true ? 0 : 1);
                     return RedirectToAction("TaiKhoans", "Admin");
